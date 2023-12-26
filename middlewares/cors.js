@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://madburatino.nomoredomainsmonster.ru',
-  'https://api.madburatino.nomoredomainsmonster.ru',
+  'https://uvaleks.nomoredomainsmonster.ru',
+  'https://api.uvaleks.nomoredomainsmonster.ru',
 ];
 
 module.exports = (req, res, next) => {
