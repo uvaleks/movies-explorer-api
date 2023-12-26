@@ -44,11 +44,9 @@ const movieSchema = new mongoose.Schema(
         message: 'Поле image является обязательным',
       },
       validate: {
-        validator: function(v) {
-          return /^(ftp|http|https):\/\/[^ "]+$/.test(v);
-        },
-        message: props => `${props.value} is not a valid URL!`
-      }
+        validator: (v) => /^(ftp|http|https):\/\/[^ "]+$/.test(v),
+        message: (props) => `${props.value} is not a valid URL!`,
+      },
     },
     trailerLink: {
       type: String,
@@ -57,11 +55,9 @@ const movieSchema = new mongoose.Schema(
         message: 'Поле trailerLink является обязательным',
       },
       validate: {
-        validator: function(v) {
-          return /^(ftp|http|https):\/\/[^ "]+$/.test(v);
-        },
-        message: props => `${props.value} is not a valid URL!`
-      }
+        validator: (v) => /^(ftp|http|https):\/\/[^ "]+$/.test(v),
+        message: (props) => `${props.value} is not a valid URL!`,
+      },
     },
     thumbnail: {
       type: String,
@@ -70,11 +66,9 @@ const movieSchema = new mongoose.Schema(
         message: 'Поле thumbnail является обязательным',
       },
       validate: {
-        validator: function(v) {
-          return /^(ftp|http|https):\/\/[^ "]+$/.test(v);
-        },
-        message: props => `${props.value} is not a valid URL!`
-      }
+        validator: (v) => /^(ftp|http|https):\/\/[^ "]+$/.test(v),
+        message: (props) => `${props.value} is not a valid URL!`,
+      },
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
