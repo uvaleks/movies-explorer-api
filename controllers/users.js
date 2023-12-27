@@ -87,7 +87,6 @@ const logout = (req, res, next) => {
 
 const updateProfile = (req, res, next) => {
   const update = req.body;
-  console.log(update);
   user.findById(req.user._id)
     .then((foundUser) => {
       if (!foundUser) {
@@ -100,7 +99,11 @@ const updateProfile = (req, res, next) => {
       if (update.name) {
         updatedFields.name = update.name;
       }
-      return user.findByIdAndUpdate(req.user._id, updatedFields, { new: true });
+      return user.findByIdAndUpdate(
+        req.user._id,
+        updatedFields,
+        { new: true, runValidators: true },
+      );
     })
     .then((savedUser) => {
       res.status(200).send(savedUser);

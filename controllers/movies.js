@@ -3,7 +3,7 @@ const ForbiddenError = require('../errors/forbidden-error');
 const movie = require('../models/movie');
 
 const getMovies = (req, res, next) => {
-  movie.find({})
+  movie.find({ owner: req.user._id })
     .then((movies) => {
       res.status(200).send(movies);
     })
@@ -12,7 +12,6 @@ const getMovies = (req, res, next) => {
 
 const deleteMovieById = (req, res, next) => {
   const _id = req.params.movieId;
-  console.log(req);
   const userId = req.user._id;
   movie.findOne({ _id })
     .then((foundMovie) => {

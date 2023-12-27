@@ -8,6 +8,7 @@ const {
   logout,
   createUser,
 } = require('./controllers/users');
+const limiter = require('./middlewares/rate-limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 const auth = require('./middlewares/auth');
@@ -20,6 +21,8 @@ const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb-dev' } = 
 mongoose.connect(MONGO_URL);
 
 app.use(json());
+
+app.use(limiter);
 
 app.use(requestLogger);
 
