@@ -1,22 +1,33 @@
 const express = require('express');
 const { json } = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 require('dotenv').config();
-const { celebrate, Joi, errors } = require('celebrate');
-const {
-  login,
-  logout,
-  createUser,
-} = require('./controllers/users');
+const helmet = require('helmet');
+const { errors } = require('celebrate');
 const limiter = require('./middlewares/rate-limiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
-const auth = require('./middlewares/auth');
 const router = require('./routes');
+
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: '.env.prod' });
+} else {
+  dotenv.config({ path: '.env' });
+}
 
 const app = express();
 
-const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb-dev' } = process.env;
+app.use(helmet());
+app.disable('x-powered-by');
+app.use(helmet.dnsPrefetchControl());
+app.use(helmet.ieNoOpen());
+app.use(helmet.frameguard({ action: 'deny' }));
+app.use(helmet.hsts({ maxAge: 5184000, includeSubDomains: true, preload: true }));
+app.use(helmet.noSniff());
+app.use(helmet.xssFilter());
+
+const { PORT, MONGO_URL } = process.env;
 
 mongoose.connect(MONGO_URL);
 
@@ -27,31 +38,6 @@ app.use(limiter);
 app.use(requestLogger);
 
 app.use(cors);
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email({ tlds: { allow: false } }).required(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email({ tlds: { allow: false } }).required(),
-    password: Joi.string().required(),
-    name: Joi.string().min(2).max(30),
-  }),
-}), createUser);
-
-app.post('/signout', logout);
-
-app.use(auth);
 
 app.use(router);
 
@@ -74,3 +60,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT);
+
+module.exports = app;

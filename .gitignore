@@ -15,7 +15,7 @@ node_modules
 .vscode
 
 # Config
-.env
+.env*
 
 # Logs
 *.log

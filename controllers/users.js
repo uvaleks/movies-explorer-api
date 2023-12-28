@@ -6,7 +6,7 @@ const NotFoundError = require('../errors/not-found-error');
 const UnauthorizedError = require('../errors/unauthorized-error');
 const user = require('../models/user');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
 const getUser = (req, res, next) => {
   const { _id } = req.user;
@@ -52,10 +52,9 @@ const login = (req, res, next) => {
           if (!matched) {
             throw new UnauthorizedError('Неправильные почта или пароль');
           }
-
           const token = jwt.sign(
             { _id: foundUser._id.toString() },
-            NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+            JWT_SECRET,
             { expiresIn: '7d' },
           );
 
