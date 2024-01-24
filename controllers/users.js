@@ -6,6 +6,10 @@ const NotFoundError = require('../errors/not-found-error');
 const UnauthorizedError = require('../errors/unauthorized-error');
 const user = require('../models/user');
 
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
+});
+
 const { JWT_SECRET } = process.env;
 
 const getUser = (req, res, next) => {

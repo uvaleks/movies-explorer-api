@@ -1,8 +1,6 @@
 const express = require('express');
 const { json } = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-require('dotenv').config();
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 const limiter = require('./middlewares/rate-limiter');
@@ -10,11 +8,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 const router = require('./routes');
 
-if (process.env.NODE_ENV === 'production') {
-  dotenv.config({ path: '.env.prod' });
-} else {
-  dotenv.config({ path: '.env.dev' });
-}
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
+});
 
 const app = express();
 
