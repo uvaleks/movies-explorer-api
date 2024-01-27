@@ -1,6 +1,7 @@
 const allowedCors = [
   'https://uvaleks.nomoredomainsmonster.ru',
   'https://api.uvaleks.nomoredomainsmonster.ru',
+  'http://localhost:3000',
 ];
 
 module.exports = (req, res, next) => {
